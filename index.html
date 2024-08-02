@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/main.css" />
+    <title>Weather</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMR0GifIRTiL2qcJgMhq1l4xp2ydau7FI&loading=async&libraries=places&callback=initAutocomplete" async defer>
+</script>
+  </head>
+  <body>
+    <header>
+      <svg
+        class="dark-icon"
+        viewBox="0 0 34 35"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M2.04207 18.1544C2.59964 26.1348 9.36799 32.6277 17.4683 32.9841C23.1835 33.232 28.2946 30.5667 31.3613 26.3673C32.6313 24.6472 31.9498 23.5005 29.8279 23.8879C28.7902 24.0739 27.7215 24.1513 26.6064 24.1048C19.0326 23.7949 12.8374 17.457 12.8064 9.97246C12.7909 7.95798 13.2091 6.05197 13.968 4.31641C14.8044 2.39491 13.7976 1.48064 11.8616 2.30193C5.72826 4.88977 1.53095 11.0727 2.04207 18.1544Z"
+          stroke="white"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <div class="search-bar">
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="grey"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-search"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input
+          class="search-input"
+          type="text"
+          placeholder="Search for your preffered city..."
+          id= "autocomplete"
+        />
+      </div>
+      <div class="current-location">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="black"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-locate-fixed"
+        >
+          <line x1="2" x2="5" y1="12" y2="12" />
+          <line x1="19" x2="22" y1="12" y2="12" />
+          <line x1="12" x2="12" y1="2" y2="5" />
+          <line x1="12" x2="12" y1="19" y2="22" />
+          <circle cx="12" cy="12" r="7" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span>Current Location</span>
+      </div>
+    </header>
+    <main>
+      <div class="city-time-date card">
+        <div class="container">
+          <div class="city"></div>
+          <div class="time-date">
+            <div class="time"><span class="seconds"></span></div>
+            <div class="date"></div>
+          </div>
+        </div>
+      </div>
+      <div class="weather card">
+        <div class="first-column">
+          <div class="temprature">
+            <span class="real"></span>
+            <span class="feels-like"
+              ><span class="word">Feels like:</span
+              ><span class="temp_itself"></span
+            ></span>
+          </div>
+          <div class="sunrise-sunset">
+            <div class="sunrise">
+              <svg
+                class="sunrise-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-sunrise"
+              >
+                <path d="M12 2v8" />
+                <path d="m4.93 10.93 1.41 1.41" />
+                <path d="M2 18h2" />
+                <path d="M20 18h2" />
+                <path d="m19.07 10.93-1.41 1.41" />
+                <path d="M22 22H2" />
+                <path d="m8 6 4-4 4 4" />
+                <path d="M16 18a4 4 0 0 0-8 0" />
+              </svg>
+              <div class="sunrise-time">
+                <span>Sunrise</span>
+                <span></span>
+              </div>
+            </div>
+            <div class="sunset">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="36"
+                height="36"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-sunset"
+              >
+                <path d="M12 10V2" />
+                <path d="m4.93 10.93 1.41 1.41" />
+                <path d="M2 18h2" />
+                <path d="M20 18h2" />
+                <path d="m19.07 10.93-1.41 1.41" />
+                <path d="M22 22H2" />
+                <path d="m16 6-4 4-4-4" />
+                <path d="M16 18a4 4 0 0 0-8 0" />
+              </svg>
+              <div class="sunset-time">
+                <span>Sunset</span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="state">
+          <img src="" alt="state.png" />
+          <figcaption class="condition"></figcaption>
+        </div>
+        <div class="info">
+          <div class="humidity">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-waves"
+            >
+              <path
+                d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"
+              />
+              <path
+                d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"
+              />
+              <path
+                d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"
+              />
+            </svg>
+            <span class="number">41%</span>
+            <span>Humidity</span>
+          </div>
+          <div class="wind-speed">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-wind"
+            >
+              <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2" />
+              <path d="M9.6 4.6A2 2 0 1 1 11 8H2" />
+              <path d="M12.6 19.4A2 2 0 1 0 14 16H2" />
+            </svg>
+            <span class="number">2km/h</span>
+            <span>Wind Speed</span>
+          </div>
+          <div class="pressure">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-gauge"
+            >
+              <path d="m12 14 4-4" />
+              <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+            </svg>
+            <span class="number">997hPa</span>
+            <span>Pressure</span>
+          </div>
+          <div class="uv">
+            <svg
+              width="58"
+              height="58"
+              viewBox="0 0 58 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="58" height="58" fill="url(#pattern0_12_388)" />
+              <defs>
+                <pattern
+                  id="pattern0_12_388"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_12_388"
+                    transform="scale(0.015625)"
+                  />
+                </pattern>
+                <image
+                  id="image0_12_388"
+                  width="64"
+                  height="64"
+                  xlink:href="data:image/png;base64,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"
+                />
+              </defs>
+            </svg>
+            <span class="number">8</span>
+            <span>UV</span>
+          </div>
+        </div>
+      </div>
+      <div class="daily-forecast card">
+        <h2>5 Days Forecast:</h2>
+        <div class="day day-1">
+          <img src="" alt="" />
+          <span class="temp"></span>
+          <span class="date"></span>
+        </div>
+        <div class="day day-2">
+          <img src="" alt="" />
+          <span class="temp"></span>
+          <span class="date"></span>
+        </div>
+        <div class="day day-3">
+          <img src="" alt="" />
+          <span class="temp"></span>
+          <span class="date"></span>
+        </div>
+        <div class="day day-4">
+          <img src="" alt="" />
+          <span class="temp"></span>
+          <span class="date"></span>
+        </div>
+        <div class="day day-5">
+          <img src="" alt="" />
+          <span class="temp"></span>
+          <span class="date"></span>
+        </div>
+      </div>
+      <div class="hourly-forecast card">
+        <h2>Hourly Forecast:</h2>
+        <div class="hours">
+          <div class="hour">
+            <span class="time"></span>
+            <img src="" alt="" />
+            <span class="temp"></span>
+            <svg
+              width="55"
+              height="55"
+              viewBox="0 0 55 55"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="55" height="55" fill="url(#pattern0_13_395)" />
+              <defs>
+                <pattern
+                  id="pattern0_13_395"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_13_395"
+                    transform="scale(0.0208333)"
+                  />
+                </pattern>
+                <image
+                  id="image0_13_395"
+                  width="48"
+                  height="48"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB5klEQVR4nO2RvUoDQRRGF7GwSy+IubHMKwgGUlvaprS1ThVLq8wNZkZSCUIamxQ+wDYp3DFtXsFKBHeU7CiygkSJcTc7O7O/sN8DXO45x7KqVatWLWzkYdHavxItq6xDR9pAXdsqq33k0gcm/FJWQEfaPwClq0CW9n8BylYBl/ZXAUpTgazY/wNQlgq4Yn8doPAVyJr9fwBFr4Br9oMACluBBNgPBChqBQywHwZQuAokxH4oQNEqYIj9TQCFqUA22N8IUJQKuMF+FADkXSHKfiQAy7lClH0VAMirgop9JQCWUwUV+6oAkHUFVfvKACzjCqr24wBAVhXi2I8FwDKqEMd+XABIu0Jc+7EBWMoV4trXAYC0KujY1wJgKVXQsa8LAElX0LWvDcASrqBr3wQAkqpgYt8IgCVUwcS+KQCYVjC1bwzADCuY2k8CAHQr6Nn3XHS8KXI5IPey0+eLxt7l2y7Ql2Og4rxOxR0w8ZRJBYy0730QLufE8W4G/P2078hmz/e3VG5/QzFxAtQd1KmYAnUXiVYItO/IR+TyFrl3hrP3w2vb37ES2lHP3z4YimadvnaAiRFQMQfmfmpXINwbI5cTwr0uOov2xcyvWRmvMXquNYaiDdTtAhOTOnXHWf9QrVo1K/19Af9KAeOOy4JzAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+            <span class="wind-speed"></span>
+          </div>
+          <div class="hour">
+            <span class="time"></span>
+            <img src="" alt="" />
+            <span class="temp"></span>
+            <svg
+              width="55"
+              height="55"
+              viewBox="0 0 55 55"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="55" height="55" fill="url(#pattern0_13_395)" />
+              <defs>
+                <pattern
+                  id="pattern0_13_395"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_13_395"
+                    transform="scale(0.0208333)"
+                  />
+                </pattern>
+                <image
+                  id="image0_13_395"
+                  width="48"
+                  height="48"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB5klEQVR4nO2RvUoDQRRGF7GwSy+IubHMKwgGUlvaprS1ThVLq8wNZkZSCUIamxQ+wDYp3DFtXsFKBHeU7CiygkSJcTc7O7O/sN8DXO45x7KqVatWLWzkYdHavxItq6xDR9pAXdsqq33k0gcm/FJWQEfaPwClq0CW9n8BylYBl/ZXAUpTgazY/wNQlgq4Yn8doPAVyJr9fwBFr4Br9oMACluBBNgPBChqBQywHwZQuAokxH4oQNEqYIj9TQCFqUA22N8IUJQKuMF+FADkXSHKfiQAy7lClH0VAMirgop9JQCWUwUV+6oAkHUFVfvKACzjCqr24wBAVhXi2I8FwDKqEMd+XABIu0Jc+7EBWMoV4trXAYC0KujY1wJgKVXQsa8LAElX0LWvDcASrqBr3wQAkqpgYt8IgCVUwcS+KQCYVjC1bwzADCuY2k8CAHQr6Nn3XHS8KXI5IPey0+eLxt7l2y7Ql2Og4rxOxR0w8ZRJBYy0730QLufE8W4G/P2078hmz/e3VG5/QzFxAtQd1KmYAnUXiVYItO/IR+TyFrl3hrP3w2vb37ES2lHP3z4YimadvnaAiRFQMQfmfmpXINwbI5cTwr0uOov2xcyvWRmvMXquNYaiDdTtAhOTOnXHWf9QrVo1K/19Af9KAeOOy4JzAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+            <span class="wind-speed"></span>
+          </div>
+          <div class="hour">
+            <span class="time"></span>
+            <img src="" alt="" />
+            <span class="temp"></span>
+            <svg
+              width="55"
+              height="55"
+              viewBox="0 0 55 55"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="55" height="55" fill="url(#pattern0_13_395)" />
+              <defs>
+                <pattern
+                  id="pattern0_13_395"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_13_395"
+                    transform="scale(0.0208333)"
+                  />
+                </pattern>
+                <image
+                  id="image0_13_395"
+                  width="48"
+                  height="48"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB5klEQVR4nO2RvUoDQRRGF7GwSy+IubHMKwgGUlvaprS1ThVLq8wNZkZSCUIamxQ+wDYp3DFtXsFKBHeU7CiygkSJcTc7O7O/sN8DXO45x7KqVatWLWzkYdHavxItq6xDR9pAXdsqq33k0gcm/FJWQEfaPwClq0CW9n8BylYBl/ZXAUpTgazY/wNQlgq4Yn8doPAVyJr9fwBFr4Br9oMACluBBNgPBChqBQywHwZQuAokxH4oQNEqYIj9TQCFqUA22N8IUJQKuMF+FADkXSHKfiQAy7lClH0VAMirgop9JQCWUwUV+6oAkHUFVfvKACzjCqr24wBAVhXi2I8FwDKqEMd+XABIu0Jc+7EBWMoV4trXAYC0KujY1wJgKVXQsa8LAElX0LWvDcASrqBr3wQAkqpgYt8IgCVUwcS+KQCYVjC1bwzADCuY2k8CAHQr6Nn3XHS8KXI5IPey0+eLxt7l2y7Ql2Og4rxOxR0w8ZRJBYy0730QLufE8W4G/P2078hmz/e3VG5/QzFxAtQd1KmYAnUXiVYItO/IR+TyFrl3hrP3w2vb37ES2lHP3z4YimadvnaAiRFQMQfmfmpXINwbI5cTwr0uOov2xcyvWRmvMXquNYaiDdTtAhOTOnXHWf9QrVo1K/19Af9KAeOOy4JzAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+            <span class="wind-speed"></span>
+          </div>
+          <div class="hour">
+            <span class="time"></span>
+            <img src="" alt="" />
+            <span class="temp"></span>
+            <svg
+              width="55"
+              height="55"
+              viewBox="0 0 55 55"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="55" height="55" fill="url(#pattern0_13_395)" />
+              <defs>
+                <pattern
+                  id="pattern0_13_395"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_13_395"
+                    transform="scale(0.0208333)"
+                  />
+                </pattern>
+                <image
+                  id="image0_13_395"
+                  width="48"
+                  height="48"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB5klEQVR4nO2RvUoDQRRGF7GwSy+IubHMKwgGUlvaprS1ThVLq8wNZkZSCUIamxQ+wDYp3DFtXsFKBHeU7CiygkSJcTc7O7O/sN8DXO45x7KqVatWLWzkYdHavxItq6xDR9pAXdsqq33k0gcm/FJWQEfaPwClq0CW9n8BylYBl/ZXAUpTgazY/wNQlgq4Yn8doPAVyJr9fwBFr4Br9oMACluBBNgPBChqBQywHwZQuAokxH4oQNEqYIj9TQCFqUA22N8IUJQKuMF+FADkXSHKfiQAy7lClH0VAMirgop9JQCWUwUV+6oAkHUFVfvKACzjCqr24wBAVhXi2I8FwDKqEMd+XABIu0Jc+7EBWMoV4trXAYC0KujY1wJgKVXQsa8LAElX0LWvDcASrqBr3wQAkqpgYt8IgCVUwcS+KQCYVjC1bwzADCuY2k8CAHQr6Nn3XHS8KXI5IPey0+eLxt7l2y7Ql2Og4rxOxR0w8ZRJBYy0730QLufE8W4G/P2078hmz/e3VG5/QzFxAtQd1KmYAnUXiVYItO/IR+TyFrl3hrP3w2vb37ES2lHP3z4YimadvnaAiRFQMQfmfmpXINwbI5cTwr0uOov2xcyvWRmvMXquNYaiDdTtAhOTOnXHWf9QrVo1K/19Af9KAeOOy4JzAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+            <span class="wind-speed"></span>
+          </div>
+          <div class="hour">
+            <span class="time"></span>
+            <img src="" alt="" />
+            <span class="temp"></span>
+            <svg
+              width="55"
+              height="55"
+              viewBox="0 0 55 55"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <rect width="55" height="55" fill="url(#pattern0_13_395)" />
+              <defs>
+                <pattern
+                  id="pattern0_13_395"
+                  patternContentUnits="objectBoundingBox"
+                  width="1"
+                  height="1"
+                >
+                  <use
+                    xlink:href="#image0_13_395"
+                    transform="scale(0.0208333)"
+                  />
+                </pattern>
+                <image
+                  id="image0_13_395"
+                  width="48"
+                  height="48"
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB5klEQVR4nO2RvUoDQRRGF7GwSy+IubHMKwgGUlvaprS1ThVLq8wNZkZSCUIamxQ+wDYp3DFtXsFKBHeU7CiygkSJcTc7O7O/sN8DXO45x7KqVatWLWzkYdHavxItq6xDR9pAXdsqq33k0gcm/FJWQEfaPwClq0CW9n8BylYBl/ZXAUpTgazY/wNQlgq4Yn8doPAVyJr9fwBFr4Br9oMACluBBNgPBChqBQywHwZQuAokxH4oQNEqYIj9TQCFqUA22N8IUJQKuMF+FADkXSHKfiQAy7lClH0VAMirgop9JQCWUwUV+6oAkHUFVfvKACzjCqr24wBAVhXi2I8FwDKqEMd+XABIu0Jc+7EBWMoV4trXAYC0KujY1wJgKVXQsa8LAElX0LWvDcASrqBr3wQAkqpgYt8IgCVUwcS+KQCYVjC1bwzADCuY2k8CAHQr6Nn3XHS8KXI5IPey0+eLxt7l2y7Ql2Og4rxOxR0w8ZRJBYy0730QLufE8W4G/P2078hmz/e3VG5/QzFxAtQd1KmYAnUXiVYItO/IR+TyFrl3hrP3w2vb37ES2lHP3z4YimadvnaAiRFQMQfmfmpXINwbI5cTwr0uOov2xcyvWRmvMXquNYaiDdTtAhOTOnXHWf9QrVo1K/19Af9KAeOOy4JzAAAAAElFTkSuQmCC"
+                />
+              </defs>
+            </svg>
+            <span class="wind-speed"></span>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="js/main.js"></script>
+  </body>
+</html>
