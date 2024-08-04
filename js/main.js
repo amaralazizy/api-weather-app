@@ -97,7 +97,7 @@ function dayyyyMMdd(date) {
 async function fetchData(objName, city = "cairo", historyDate = "") {
   formattedHistoryDate = dayyyyMMdd(historyDate);
   const apiKey = "0f249b8914314f61812143656241607";
-  const apiUrl = `http://api.weatherapi.com/v1/${objName}.json?key=${apiKey}&q=${city}&dt=${formattedHistoryDate}`;
+  const apiUrl = `https://api.weatherapi.com/v1/${objName}.json?key=${apiKey}&q=${city}&dt=${formattedHistoryDate}`;
   try {
     const response = await fetch(apiUrl, {
       method: "GET",
@@ -313,11 +313,11 @@ let infoEle = document.querySelector(".weather");
 
 let dailyEle = document.querySelector(".daily-forecast");
 
-let tempSunEle = document.querySelector(".weather .first-column");
+let tempSunEle = document.querySelector(".first-column");
 
-let stateEle = document.querySelector(".weather .state");
+let stateEle = document.querySelector(".state");
 
-const mediaQuery1230 = window.matchMedia("(max-width: 1020px)");
+const mediaQuery1130 = window.matchMedia("(max-width: 1130px)");
 
 const mediaQuery420 = window.matchMedia("(max-width: 420px)");
 
@@ -337,16 +337,15 @@ document.querySelector(".current-location").addEventListener("click", () => {
   detectPosition();
 });
 
-handleMediaQueryChange(mediaQuery1230, tempSunEle);
-mediaQuery1230.addEventListener("change", handleMediaQueryChange);
+handleMediaQueryChange(mediaQuery1130, tempSunEle);
+mediaQuery1130.addEventListener("change", handleMediaQueryChange);
 
 changeSearchbarIndex = (event) => {
   if (event.matches) {
     document
-    .querySelector("header")
-    .append(document.querySelector(".search-bar"));
+      .querySelector("header")
+      .append(document.querySelector(".search-bar"));
   }
-  
 };
 changeSearchbarIndex(mediaQuery420);
 mediaQuery420.addEventListener("change", changeSearchbarIndex);
@@ -358,6 +357,8 @@ document.querySelectorAll(".card").forEach((card) => {
   const loader = document.createElement("div");
   loader.textContent = "Loading...";
   loader.className = "loader";
+  card.style.position = "relative";
+  loader.style.cssText += "position:asolute; inset:50%; translate: -50% -50%;";
   card.appendChild(loader);
 });
 

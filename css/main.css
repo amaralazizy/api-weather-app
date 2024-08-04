@@ -1,17 +1,32 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  --font-size-xxs: 0.5rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-xxl: 1.5rem;
+  --font-size-xxxl: 2rem;
+  --font-size-huge: 3rem;
+  --font-size-giant: 4rem;
+  --font-size-massive: 5rem;
+  --font-size-titanic: 6rem;
+}
+
 html {
-  color-scheme: light dark;
+  color-scheme: light;
+}
+
+button {
+  outline: none;
+  border: none;
 }
 
 @media (prefers-color-scheme: light) {
   body {
     background-image: linear-gradient(to right, white, #0c202b);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-image: linear-gradient(to right, #011824, #0c202b);
   }
 }
 
@@ -34,10 +49,9 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  gap: 2rem;
 }
-
 
 header > *:not(.search-bar) {
   cursor: pointer;
@@ -67,15 +81,15 @@ header .search-bar {
   -o-border-radius: 30px;
 }
 
-@media (max-width: 420px) {
-    header  {
-      flex-wrap: wrap;
-      justify-content: space-around;
-    }
+@media (width <= 450px) {
+  header {
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
 
-    header .search-bar {
-      flex: 1 1 100%;
-    }
+  header .search-bar {
+    flex: 1 1 100%;
+  }
 }
 
 header .search-bar .search-input {
@@ -88,12 +102,14 @@ header .search-bar .search-input {
   min-height: 100%;
 }
 
-header .current-location {
-  width: fit-content;
+.current-location {
+  /* width: fit-content; */
+  color: inherit;
+  font-size: var(--font-size-sm);
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 25px;
+  padding: 10px 25px;
   background-image: linear-gradient(to right, #025482 19%, #003e50 100%);
   border-radius: 30px;
   -webkit-border-radius: 30px;
@@ -104,7 +120,7 @@ header .current-location {
   white-space: nowrap;
 }
 
-@media (max-width: 820px) {
+@media (450px < width < 820px) {
   header .current-location span {
     display: none;
   }
@@ -112,20 +128,18 @@ header .current-location {
 
 main {
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  /* grid-template-columns: repeat(auto-fit, minmax(0px, 700px)); */
+  /* grid-template-columns: repeat(auto-fit, minmax(auto, 100px)); */
+  grid-template-areas:
+    "city weather weather"
+    "daily hourly hourly";
   gap: 50px;
   justify-content: center;
 }
 
-@media (max-width: 1230px) {
+@media (width <= 1130px) {
   main {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  main > * {
-    flex: 1;
+    flex-direction: column;
   }
 }
 
@@ -141,22 +155,23 @@ main .card {
 
 main .city-time-date {
   /* width: 400px; */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-area: city;
+  display: flex;
+  /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
   /* flex-direction: column; */
   place-content: center;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
   /* justify-content: space-around; */
   /* width: min(90%, fit-content); */
   gap: min(50px, 5%);
   padding: 1.5rem;
 }
 
-/* @media (max-width: 740px) {
+@media (width <= 620px) {
   .city-time-date {
     flex-direction: column;
   }
-} */
+}
 
 main .city-time-date .container {
   display: flex;
@@ -164,10 +179,9 @@ main .city-time-date .container {
   place-content: center;
 }
 
-/* @media (max-width: 1230px) {
+/* @media (width <= 1130px) {
   main .city-time-date {
-    padding: 1.5em;
-    padding-right: 0;
+    
   }
 } */
 
@@ -188,6 +202,7 @@ main .city-time-date .city {
 }
 
 main .city-time-date .time-date .time {
+  display: flex;
   height: 80px;
   font-size: 4.5rem;
   position: relative;
@@ -197,10 +212,11 @@ main .city-time-date .time-date .time .seconds {
   font-size: 1rem;
   position: absolute;
   right: -1.5rem;
-  bottom: -0.125rem;  
+  bottom: -0.125rem;
 }
 
 main .weather {
+  grid-area: weather;
   display: flex;
   padding: 50px;
   align-items: center;
@@ -213,7 +229,7 @@ main .first-column {
   gap: 20px;
 }
 
-@media (max-width: 1230px) {
+/* @media (width <= 1130px) {
   main .weather {
     padding: 5%;
     width: fit-content;
@@ -221,7 +237,7 @@ main .first-column {
   main .weather .first-column {
     display: none;
   }
-}
+} */
 
 main .temprature {
   display: flex;
@@ -279,10 +295,11 @@ main .state {
 
 main .state .condition {
   position: absolute;
-  bottom: 1em;
+  bottom: 0;
 }
 
 main .state img {
+  display: block;
   min-width: 200px;
   /* aspect-ratio: 1; */
 }
@@ -294,7 +311,7 @@ main .info {
   gap: 20px;
 }
 
-@media (max-width: 1230px) {
+@media (width <= 1130px) {
   main .info {
     height: 100%;
     width: 100%;
@@ -313,6 +330,7 @@ main .weather .info > * {
 } */
 
 main .daily-forecast {
+  grid-area: daily;
   padding: 2vw;
 }
 
@@ -326,25 +344,26 @@ main .daily-forecast .day {
   gap: 2vw;
 }
 
-main .hourly-forecast {
+.hourly-forecast {
+  grid-area: hourly;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  padding: 30px;
+  gap: 30px;
+  padding: 50px;
+  overflow-x: hidden;
 }
 
-@media (max-width: 680px) {
-  .hourly-forecast {
-    overflow-x: scroll;
-    /* scroll-snap-type: man; */
-    /* scroll-behavior: smooth; */
-  }
-}
+
+
 
 main .hourly-forecast .hours {
   display: flex;
+  align-items: center;
   gap: 30px;
+  min-height: fit-content;
+  overflow-x: scroll;
+  /* scrollbar-width: none; */
 }
 
 main .hourly-forecast .hours .hour {
@@ -362,6 +381,15 @@ main .hourly-forecast .hours .hour {
   gap: 10px;
 }
 
+@media (width <= 715px) {
+  .hours .hour:nth-child(3) {
+    scale: 1.2;
+  }
+  .hours .hour:first-child, .hours .hour:last-child {
+    scale: 0.8;
+  }
+}
+
 main .hourly-forecast .hours .hour .time {
   font-weight: bold;
   font-size: large;
@@ -371,7 +399,7 @@ main .hourly-forecast .hours .hour .temp {
   font-weight: bold;
 }
 
-@keyframes loading {
+/* @keyframes loading {
   0% {
     transform: rotateZ(-180deg);
     -webkit-transform: rotateZ(-180deg);
@@ -385,4 +413,5 @@ main .hourly-forecast .hours .hour .temp {
   }
   100% {
   }
-}
+} */
+
