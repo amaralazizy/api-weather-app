@@ -358,7 +358,7 @@ document.querySelectorAll(".card").forEach((card) => {
   loader.textContent = "Loading...";
   loader.className = "loader";
   card.style.position = "relative";
-  loader.style.cssText += "position:asolute; left:50%; top:50%; translate: -50% -50%;";
+  loader.style.cssText += "position:absolute; left:50%; top:50%; translate: -50% -50%;";
   card.appendChild(loader);
 });
 
