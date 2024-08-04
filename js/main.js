@@ -96,7 +96,7 @@ function dayyyyMMdd(date) {
 
 async function fetchData(objName, city = "cairo", historyDate = "") {
   formattedHistoryDate = dayyyyMMdd(historyDate);
-  const apiKey = "0f249b8914314f61812143656241607";
+  const apiKey = "e16ec41a89a54903bd901218240408";
   const apiUrl = `https://api.weatherapi.com/v1/${objName}.json?key=${apiKey}&q=${city}&dt=${formattedHistoryDate}`;
   try {
     const response = await fetch(apiUrl, {
