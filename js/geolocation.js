@@ -9,7 +9,7 @@ export function detectPosition(callback) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
     let city = `${latitude},${longitude}`;
-    getData(city);
+    callback(city);
   }
 
   function showError(error) {
