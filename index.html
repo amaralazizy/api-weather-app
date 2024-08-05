@@ -1,29 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/main.css" />
     <title>Weather</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMR0GifIRTiL2qcJgMhq1l4xp2ydau7FI&loading=async&libraries=places&callback=initAutocomplete" async defer>
-</script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMR0GifIRTiL2qcJgMhq1l4xp2ydau7FI&loading=async&libraries=places&callback=initAutocomplete"
+      async
+      defer
+    ></script>
   </head>
   <body>
     <header>
-      <svg
-        class="dark-icon"
-        viewBox="0 0 34 35"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M2.04207 18.1544C2.59964 26.1348 9.36799 32.6277 17.4683 32.9841C23.1835 33.232 28.2946 30.5667 31.3613 26.3673C32.6313 24.6472 31.9498 23.5005 29.8279 23.8879C28.7902 24.0739 27.7215 24.1513 26.6064 24.1048C19.0326 23.7949 12.8374 17.457 12.8064 9.97246C12.7909 7.95798 13.2091 6.05197 13.968 4.31641C14.8044 2.39491 13.7976 1.48064 11.8616 2.30193C5.72826 4.88977 1.53095 11.0727 2.04207 18.1544Z"
-          stroke="white"
-          stroke-width="3"
+      <i class="theme-toggle">
+        <svg
+          class="theme-icon sun"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-        />
-      </svg>
+          class="lucide lucide-sun"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </svg>
+        <svg
+          class="theme-icon moon"
+          viewBox="0 0 34 35"
+          fill="white"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2.04207 18.1544C2.59964 26.1348 9.36799 32.6277 17.4683 32.9841C23.1835 33.232 28.2946 30.5667 31.3613 26.3673C32.6313 24.6472 31.9498 23.5005 29.8279 23.8879C28.7902 24.0739 27.7215 24.1513 26.6064 24.1048C19.0326 23.7949 12.8374 17.457 12.8064 9.97246C12.7909 7.95798 13.2091 6.05197 13.968 4.31641C14.8044 2.39491 13.7976 1.48064 11.8616 2.30193C5.72826 4.88977 1.53095 11.0727 2.04207 18.1544Z"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </i>
       <div class="search-bar">
         <svg
           class="search-icon"
@@ -45,7 +72,7 @@
           class="search-input"
           type="text"
           placeholder="Search for your preffered city..."
-          id= "autocomplete"
+          id="autocomplete"
         />
       </div>
       <button class="current-location">
@@ -220,33 +247,27 @@
           </div>
           <div class="uv">
             <svg
-              width="58"
-              height="58"
-              viewBox="0 0 58 58"
-              fill="none"
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
+              fill="currentColor"
+              height="58px"
+              width="58px"
+              version="1.1"
+              id="Capa_1"
+              viewBox="0 0 292.915 292.915"
+              xml:space="preserve"
             >
-              <rect width="58" height="58" fill="url(#pattern0_12_388)" />
-              <defs>
-                <pattern
-                  id="pattern0_12_388"
-                  patternContentUnits="objectBoundingBox"
-                  width="1"
-                  height="1"
-                >
-                  <use
-                    xlink:href="#image0_12_388"
-                    transform="scale(0.015625)"
-                  />
-                </pattern>
-                <image
-                  id="image0_12_388"
-                  width="64"
-                  height="64"
-                  xlink:href="data:image/png;base64,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"
+              <g>
+                <path
+                  d="M134.997,150.764c0,5.823-2.153,8.564-6.068,8.564c-3.816,0-5.97-2.888-5.97-8.564v-18.987h-7.487v18.399   c0,10.521,4.894,15.121,13.213,15.121c8.612,0,13.75-4.845,13.75-15.023v-18.498h-7.438V150.764z"
                 />
-              </defs>
+                <path
+                  d="M164.355,145.87c-1.126,3.768-2.153,7.683-2.985,11.646h-0.147c-0.783-4.11-1.811-7.879-2.936-11.794l-4.013-13.946h-8.172   l10.57,32.982h8.71l11.108-32.982h-7.928L164.355,145.87z"
+                />
+                <path
+                  d="M146.457,0L0,146.455l146.457,146.46l146.458-146.46L146.457,0z M215.423,201.292l-12.131,12.131l-27.457-27.457   c-6.052,4.406-13.12,7.49-20.8,8.819v38.627H137.88v-38.635c-7.679-1.329-14.752-4.401-20.803-8.807l-27.453,27.453l-12.131-12.131   l27.648-27.648c-4.126-6.053-6.954-13.05-8.094-20.609H57.504V135.88h39.913c1.424-7.26,4.415-13.953,8.613-19.719L77.492,87.623   l12.131-12.131l28.729,28.729c5.763-3.929,12.38-6.686,19.527-7.924V55.504h17.155v40.793c7.147,1.238,13.764,3.996,19.527,7.925   l28.73-28.729l12.131,12.131l-28.537,28.537c4.198,5.766,7.187,12.459,8.612,19.72h39.914v17.155h-39.543   c-1.141,7.558-3.968,14.557-8.093,20.609L215.423,201.292z"
+                />
+              </g>
             </svg>
             <span class="number">8</span>
             <span>UV</span>

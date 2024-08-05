@@ -270,7 +270,6 @@ searchCity.addEventListener("keyup", function (event) {
 function updateClock() {
   const now = new Date();
   const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-  console.log(utcNow);
   const hours = utcNow.getHours().toString().padStart(2, "0");
   const minutes = utcNow.getMinutes().toString().padStart(2, "0");
   const seconds = utcNow.getSeconds().toString().padStart(2, "0");
@@ -296,7 +295,6 @@ let cardsEle = document.querySelectorAll(".card img");
 cardsEle.forEach((card) => {
   card.addEventListener("DOMContentLoaded", () => {
     document.body.style.cssText += "background-color: white;";
-    console.log("Loaded");
     // card.forEach((data) => {
     //   data.style.cssText += "opacity: 0";
     //   let loadingEle = document.createElement("div");
@@ -358,7 +356,8 @@ document.querySelectorAll(".card").forEach((card) => {
   loader.textContent = "Loading...";
   loader.className = "loader";
   card.style.position = "relative";
-  loader.style.cssText += "position:absolute; left:50%; top:50%; translate: -50% -50%;";
+  loader.style.cssText +=
+    "position:absolute; left:50%; top:50%; translate: -50% -50%;";
   card.appendChild(loader);
 });
 
@@ -372,5 +371,41 @@ window.addEventListener("load", () => {
       child.style.opacity = "";
     });
   });
-  console.log("All cards loaded and displayed");
+  // console.log("All cards loaded and displayed");
 });
+
+//
+
+const toggleTheme = () => {
+  document.documentElement.className =
+    /^dark/i.test(document.documentElement.className)
+      ? (document.documentElement.className = "light")
+      : (document.documentElement.className = "dark");
+  updateThemeIcon();
+};
+
+const updateThemeIcon = () => {
+  const sunIcon = document.querySelector(".theme-icon.sun");
+  const moonIcon = document.querySelector(".theme-icon.moon");
+  
+  sunIcon.classList.toggle("active");
+  moonIcon.classList.toggle("active");
+};
+
+const setTheme = () => {
+  const sunIcon = document.querySelector(".theme-icon.sun");
+  const moonIcon = document.querySelector(".theme-icon.moon");
+  const preferredTheme = localStorage.getItem("theme");
+  document.documentElement.className = preferredTheme;
+  if (preferredTheme === "light") sunIcon.classList.add("active");
+  else moonIcon.classList.add("active");
+};
+
+document.querySelector(".theme-toggle").addEventListener("click", () => {
+  toggleTheme();
+  const activeTheme = document.documentElement.className;
+  localStorage.setItem("theme", activeTheme);
+});
+
+// Call setTheme when the page loads
+document.addEventListener("DOMContentLoaded", setTheme);
