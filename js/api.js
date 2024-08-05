@@ -81,13 +81,4 @@ export async function fetchDailyForecast(city) {
   return daysInfo;
 }
 
-export let autocomplete = 0;
-export function initAutocomplete() {
-  autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById("autocomplete"),
-    {
-      types: ["establishment"],
-      fields: ["place_id", "geometry", "name"],
-    }
-  );
-}
+
