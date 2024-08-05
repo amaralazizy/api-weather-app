@@ -366,6 +366,7 @@ main {
   display: flex;
   align-items: center;
   gap: 2vw;
+  font-size: clamp(1rem, 0.5rem + 1vw, 4rem);
 }
 
 .hourly-forecast {
@@ -373,10 +374,52 @@ main {
   text-align: center;
   padding: 50px;
   position: relative;
-  min-height: 400px;
+  min-height: 450px;
+}
+
+.hourly-forecast h2 {
+  margin-bottom: 20px;
 }
 
 .hourly-forecast .hours {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+}
+
+@keyframes rotate-hours {
+  from {
+    transform: perspective(5000px) rotateY(0deg);
+    -webkit-transform: perspective(5000px) rotateY(0deg);
+    -moz-transform: perspective(5000px) rotateY(0deg);
+    -ms-transform: perspective(5000px) rotateY(0deg);
+    -o-transform: perspective(5000px) rotateY(0deg);
+  }
+  to {
+    transform: perspective(5000px) rotateY(360deg);
+    -webkit-transform: perspective(5000px) rotateY(360deg);
+    -moz-transform: perspective(5000px) rotateY(360deg);
+    -ms-transform: perspective(5000px) rotateY(360deg);
+    -o-transform: perspective(5000px) rotateY(360deg);
+  }
+}
+
+.hourly-forecast .hours .hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: var(--clr-hour-forecast);
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  padding: 10px;
+  gap: 10px;
+}
+
+@media (width <= 726px) {
+  .hourly-forecast .hours {
   position: absolute;
   width: 130px;
   height: 270px;
@@ -392,55 +435,29 @@ main {
   -webkit-animation: rotate-hours 10s linear infinite forwards;
 }
 
-@keyframes rotate-hours {
-  from {
-    transform: perspective(5000px) rotateY(0deg);
-    -webkit-transform: perspective(5000px) rotateY(0deg);
-    -moz-transform: perspective(5000px) rotateY(0deg);
-    -ms-transform: perspective(5000px) rotateY(0deg);
-    -o-transform: perspective(5000px) rotateY(0deg);
-}
-  to {
-    transform: perspective(5000px) rotateY(360deg);
-    -webkit-transform: perspective(5000px) rotateY(360deg);
-    -moz-transform: perspective(5000px) rotateY(360deg);
-    -ms-transform: perspective(5000px) rotateY(360deg);
-    -o-transform: perspective(5000px) rotateY(360deg);
-}
-}
-
-.hourly-forecast .hours .hour {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-image: var(--clr-hour-forecast);
-  border-radius: 30px;
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
-  -ms-border-radius: 30px;
-  -o-border-radius: 30px;
-  padding: 10px;
-  gap: 10px;
-  transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(150px);
-  -webkit-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(150px);
-  -moz-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(150px);
-  -ms-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(150px);
-  -o-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(150px);
-}
-
-@media (width <= 410px) {
   .hourly-forecast .hours .hour {
-  transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(100px);
-  -webkit-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(100px);
-  -moz-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(100px);
-  -ms-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(100px);
-  -o-transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg)) translateZ(100px);
+    position: absolute;
+    inset: 0;
+    transform: rotateY(calc(var(--position) * (360 / var(--quantity)) * 1deg))
+      translateZ(26vw);
+    -webkit-transform: rotateY(
+        calc(var(--position) * (360 / var(--quantity)) * 1deg)
+      )
+      translateZ(26vw);
+    -moz-transform: rotateY(
+        calc(var(--position) * (360 / var(--quantity)) * 1deg)
+      )
+      translateZ(26vw);
+    -ms-transform: rotateY(
+        calc(var(--position) * (360 / var(--quantity)) * 1deg)
+      )
+      translateZ(26vw);
+    -o-transform: rotateY(
+        calc(var(--position) * (360 / var(--quantity)) * 1deg)
+      )
+      translateZ(26vw);
+  }
 }
-}
-
-
 
 .hourly-forecast .hours .hour .time,
 .hourly-forecast .hours .hour .temp {
@@ -453,7 +470,7 @@ main {
 
 .pac-container {
   background-image: var(--clr-card-bg);
-  
+
   border-radius: 5px 5px 15px 15px;
   -webkit-border-radius: 5px 5px 15px 15px;
   -moz-border-radius: 5px 5px 15px 15px;

@@ -99,25 +99,22 @@ export function updateHourlyForecast(forecastJSON) {
 }
 
 export async function updateDailyForecast(daysInfo) {
-    const daysInfoEle = document.querySelectorAll(".daily-forecast .day");
-    for (let i = 0; i < 5; i++) {
-      const conditionIconEle = daysInfoEle[i].querySelector("img");
-      conditionIconEle.setAttribute(
-        "src",
-        `https:${daysInfo[i].conditionIcon}`
-      );
+  const daysInfoEle = document.querySelectorAll(".daily-forecast .day");
+  for (let i = 0; i < 5; i++) {
+    const conditionIconEle = daysInfoEle[i].querySelector("img");
+    conditionIconEle.setAttribute("src", `https:${daysInfo[i].conditionIcon}`);
 
-      const temperatureEle = daysInfoEle[i].querySelector(".temp");
-      temperatureEle.innerHTML = `${parseInt(daysInfo[i].temperature)}&deg;C`;
+    const temperatureEle = daysInfoEle[i].querySelector(".temp");
+    temperatureEle.innerHTML = `${parseInt(daysInfo[i].temperature)}&deg;C`;
 
-      const dateEle = daysInfoEle[i].querySelector(".date");
-      const formattedDate = `${
-        daysOfWeek[new Date(daysInfo[i].date).getDay()].long
-      }, ${new Date(daysInfo[i].date).getDate() + 1} ${
-        monthsOfYear[new Date(daysInfo[i].date).getMonth()].short
-      }`;
-      dateEle.innerHTML = formattedDate;
-    }
+    const dateEle = daysInfoEle[i].querySelector(".date");
+    const formattedDate = `${
+      daysOfWeek[new Date(daysInfo[i].date).getDay()].long
+    }, ${new Date(daysInfo[i].date).getDate() + 1} ${
+      monthsOfYear[new Date(daysInfo[i].date).getMonth()].short
+    }`;
+    dateEle.innerHTML = formattedDate;
+  }
 }
 
 export function updateClock(globalTimeZoneOffset) {

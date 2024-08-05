@@ -10,5 +10,3 @@ export function dayyyyMMdd(date) {
 export function formatTime(timeString) {
   return timeString.replace(/:\d{2}\s/, " ");
 }
-
-

@@ -5,7 +5,7 @@ export function detectPosition(callback) {
     console.log("Geolocation is not supported by this browser.");
   }
 
-    function sendPosition(position) {
+  function sendPosition(position) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
     let city = `${latitude},${longitude}`;
