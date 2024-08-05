@@ -322,11 +322,6 @@ main {
   position: relative;
 }
 
-.state .condition {
-  position: absolute;
-  bottom: 0;
-}
-
 .state img {
   display: block;
   min-width: 200px;
