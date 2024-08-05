@@ -15,22 +15,20 @@ export function updateCityAndTime(weatherData) {
 export function updateWeatherInfo(weatherData, sunTimes) {
   const temperature = weatherData.current.temp_c;
   const feelsTemperature = weatherData.current.feelslike_c;
-  const tempEle = document.querySelector(
-    ".weather .first-column .temprature .real"
-  );
+  const tempEle = document.querySelector(".first-column .temprature .real");
   tempEle.innerHTML = `${parseInt(temperature)}&deg;C`;
   const tempFeelsEle = document.querySelector(
-    ".weather .first-column .temprature .feels-like .temp_itself"
+    ".first-column .temprature .feels-like .temp_itself"
   );
   tempFeelsEle.innerHTML = `${parseInt(feelsTemperature)}&deg;C`;
   const sunrise = sunTimes.results.sunrise;
   const sunriseEle = document.querySelector(
-    ".weather .first-column .sunrise-sunset .sunrise .sunrise-time span:last-child"
+    ".first-column .sunrise-sunset .sunrise .sunrise-time span:last-child"
   );
   sunriseEle.innerHTML = Utils.formatTime(sunrise);
   const sunset = sunTimes.results.sunset;
   const sunsetEle = document.querySelector(
-    ".weather .first-column .sunrise-sunset .sunset .sunset-time span:last-child"
+    ".first-column .sunrise-sunset .sunset .sunset-time span:last-child"
   );
   sunsetEle.innerHTML = Utils.formatTime(sunset);
   const condition = weatherData.current.condition.text;
