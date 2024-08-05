@@ -1,311 +1,375 @@
-const daysOfWeek = [
-  { short: "Mon", long: "Monday" },
-  { short: "Tue", long: "Tuesday" },
-  { short: "Wed", long: "Wednesday" },
-  { short: "Thu", long: "Thursday" },
-  { short: "Fri", long: "Friday" },
-  { short: "Sat", long: "Saturday" },
-  { short: "Sun", long: "Sunday" },
-];
+import * as API from "./api.js";
+import * as DOM from "./dom.js";
+// import * as Utils from "./utils.js";
+import * as Theme from "./theme.js";
+import { detectPosition } from "./geolocation.js";
+// const daysOfWeek = [
+//   { short: "Mon", long: "Monday" },
+//   { short: "Tue", long: "Tuesday" },
+//   { short: "Wed", long: "Wednesday" },
+//   { short: "Thu", long: "Thursday" },
+//   { short: "Fri", long: "Friday" },
+//   { short: "Sat", long: "Saturday" },
+//   { short: "Sun", long: "Sunday" },
+// ];
 
-const monthsOfYear = [
-  { short: "Jan", long: "January" },
-  { short: "Feb", long: "February" },
-  { short: "Mar", long: "March" },
-  { short: "Apr", long: "April" },
-  { short: "May", long: "May" },
-  { short: "Jun", long: "June" },
-  { short: "Jul", long: "July" },
-  { short: "Aug", long: "August" },
-  { short: "Sep", long: "September" },
-  { short: "Oct", long: "October" },
-  { short: "Nov", long: "November" },
-  { short: "Dec", long: "December" },
-];
+// const monthsOfYear = [
+//   { short: "Jan", long: "January" },
+//   { short: "Feb", long: "February" },
+//   { short: "Mar", long: "March" },
+//   { short: "Apr", long: "April" },
+//   { short: "May", long: "May" },
+//   { short: "Jun", long: "June" },
+//   { short: "Jul", long: "July" },
+//   { short: "Aug", long: "August" },
+//   { short: "Sep", long: "September" },
+//   { short: "Oct", long: "October" },
+//   { short: "Nov", long: "November" },
+//   { short: "Dec", long: "December" },
+// ];
 
-let autocomplete;
-function initAutocomplete() {
-  autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById("autocomplete"),
-    {
-      types: ["establishment"],
-      fields: ["place_id", "geometry", "name"],
-    }
-  );
-}
+let globalTimeZoneOffset = 0;
 
-// autocomplete.addEventListener("place_changed", onPlaceChanged);
 
-function detectPosition() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(sendPosition, showError);
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
 
-  function sendPosition(position) {
-    let latitude = position.coords.latitude;
-    let longitude = position.coords.longitude;
-    let city = `${latitude},${longitude}`;
-    getData(city);
-  }
+// function detectPosition() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(sendPosition, showError);
+//   } else {
+//     console.log("Geolocation is not supported by this browser.");
+//   }
 
-  function showError(error) {
-    switch (error.code) {
-      case error.PERMISSION_DENIED:
-        console.log("User denied the request for Geolocation.");
-        break;
-      case error.POSITION_UNAVAILABLE:
-        console.log("Location information is unavailable.");
-        break;
-      case error.TIMEOUT:
-        console.log("The request to get user location timed out.");
-        break;
-      case error.UNKNOWN_ERROR:
-        console.log("An unknown error occurred.");
-        break;
-    }
-  }
-}
+//   function sendPosition(position) {
+//     let latitude = position.coords.latitude;
+//     let longitude = position.coords.longitude;
+//     let city = `${latitude},${longitude}`;
+//     getData(city);
+//   }
 
-async function fetchSunTimes() {
-  const apiUrl =
-    "https://api.sunrisesunset.io/json?lat=30.111946&lng=31.270961000000003";
+//   function showError(error) {
+//     switch (error.code) {
+//       case error.PERMISSION_DENIED:
+//         console.log("User denied the request for Geolocation.");
+//         break;
+//       case error.POSITION_UNAVAILABLE:
+//         console.log("Location information is unavailable.");
+//         break;
+//       case error.TIMEOUT:
+//         console.log("The request to get user location timed out.");
+//         break;
+//       case error.UNKNOWN_ERROR:
+//         console.log("An unknown error occurred.");
+//         break;
+//     }
+//   }
+// }
 
-  try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-  }
-}
+// async function fetchSunTimes() {
+//   const apiUrl =
+//     "https://api.sunrisesunset.io/json?lat=30.111946&lng=31.270961000000003";
+
+//   try {
+//     const response = await fetch(apiUrl);
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("There was a problem with the fetch operation:", error);
+//   }
+// }
 
 // TODO:Utils
-function dayyyyMMdd(date) {
-  const day = date === "" ? new Date() : new Date(date);
-  const yyyy = day.getFullYear();
-  const mm = String(day.getMonth() + 1).padStart(2, "0");
-  const dd = String(day.getDate()).padStart(2, "0");
-  const formattedDate = `${yyyy}-${mm}-${dd}`;
-  return formattedDate;
-}
+// function dayyyyMMdd(date) {
+//   const day = date === "" ? new Date() : new Date(date);
+//   const yyyy = day.getFullYear();
+//   const mm = String(day.getMonth() + 1).padStart(2, "0");
+//   const dd = String(day.getDate()).padStart(2, "0");
+//   const formattedDate = `${yyyy}-${mm}-${dd}`;
+//   return formattedDate;
+// }
 
-async function fetchData(objName, city = "cairo", historyDate = "") {
-  formattedHistoryDate = dayyyyMMdd(historyDate);
-  const apiKey = "e16ec41a89a54903bd901218240408";
-  const apiUrl = `https://api.weatherapi.com/v1/${objName}.json?key=${apiKey}&q=${city}&dt=${formattedHistoryDate}`;
-  try {
-    const response = await fetch(apiUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-  }
-}
+// async function fetchTimeZoneOffset(
+//   lat,
+//   lon,
+//   timestamp = new Date().getTime() / 1000
+// ) {
+//   const apiKey = "AIzaSyCMR0GifIRTiL2qcJgMhq1l4xp2ydau7FI";
+//   const apiUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${timestamp}&key=${apiKey}`;
+
+//   try {
+//     const response = await fetch(apiUrl, {
+//       method: "GET",
+//     });
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("There was a problem with the fetch operation:", error);
+//   }
+// }
+// async function fetchData(objName, city = "cairo", historyDate = "") {
+//   formattedHistoryDate = dayyyyMMdd(historyDate);
+//   const apiKey = "e16ec41a89a54903bd901218240408";
+//   const apiUrl = `https://api.weatherapi.com/v1/${objName}.json?key=${apiKey}&q=${city}&dt=${formattedHistoryDate}`;
+//   try {
+//     const response = await fetch(apiUrl, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     if (!response.ok) {
+//       throw new Error("Network response was not ok");
+//     }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("There was a problem with the fetch operation:", error);
+//   }
+// }
 
 async function getData(city = "cairo") {
-  const weatherData = await fetchData("current", city);
-  const sunTimes = await fetchSunTimes();
-  const forecastJSON = await fetchData("forecast", city);
+  const weatherData = await API.fetchWeatherData("current", city);
+  const sunTimes = await API.fetchSunTimes();
+  const forecastJSON = await API.fetchWeatherData("forecast", city);
+  const timeZoneOffset = await API.fetchTimeZoneOffset(
+    weatherData.location.lat,
+    weatherData.location.lon
+  );
 
+  globalTimeZoneOffset = timeZoneOffset.rawOffset + timeZoneOffset.dstOffset;
   if (weatherData) {
+
+    DOM.updateCityAndTime(weatherData);
+    DOM.updateWeatherInfo(weatherData, sunTimes);
+    DOM.updateHourlyForecast(forecastJSON);
     // TODO Make a function city and time
 
-    const cityEle = document.querySelector(".city-time-date .city");
-    cityEle.innerHTML = weatherData.location.name;
-    const date = new Date(weatherData.location.localtime.split(" ")[0]);
-    const dayOfTheWeek = date.getDay();
-    const monthOfTheYear = date.getMonth();
-    const dayOftheMonth = date.getDate();
-    const dateEle = document.querySelector(".city-time-date .time-date .date");
-    dateEle.innerHTML = `${daysOfWeek[dayOfTheWeek].long}, ${dayOftheMonth} ${monthsOfYear[monthOfTheYear].short}`;
+    const daysInfo = await API.fetchDailyForecast(city);
+    DOM.updateDailyForecast(daysInfo);
+
+    // const cityEle = document.querySelector(".city-time-date .city");
+    // cityEle.innerHTML = weatherData.location.name;
+    // const date = new Date(weatherData.location.localtime.split(" ")[0]);
+    // const dayOfTheWeek = date.getDay();
+    // const monthOfTheYear = date.getMonth();
+    // const dayOftheMonth = date.getDate();
+    // const dateEle = document.querySelector(".city-time-date .time-date .date");
+    // dateEle.innerHTML = `${daysOfWeek[dayOfTheWeek].long}, ${dayOftheMonth} ${monthsOfYear[monthOfTheYear].short}`;
 
     // TODO Make a function weather info
 
-    const temperature = weatherData.current.temp_c;
-    const feelsTemperature = weatherData.current.feelslike_c;
-    const tempEle = document.querySelector(
-      ".weather .first-column .temprature .real"
-    );
-    tempEle.innerHTML = `${parseInt(temperature)}&deg;C`;
-    const tempFeelsEle = document.querySelector(
-      ".weather .first-column .temprature .feels-like .temp_itself"
-    );
-    tempFeelsEle.innerHTML = `${parseInt(feelsTemperature)}&deg;C`;
-    const sunrise = sunTimes.results.sunrise;
-    const sunriseEle = document.querySelector(
-      ".weather .first-column .sunrise-sunset .sunrise .sunrise-time span:last-child"
-    );
-    sunriseEle.innerHTML = sunrise.replace(/:\d{2}\s/, " ");
-    const sunset = sunTimes.results.sunset;
-    const sunsetEle = document.querySelector(
-      ".weather .first-column .sunrise-sunset .sunset .sunset-time span:last-child"
-    );
-    sunsetEle.innerHTML = sunset.replace(/:\d{2}\s/, " ");
-    const condition = weatherData.current.condition.text;
-    const conditionEle = document.querySelector(".state .condition");
-    conditionEle.innerHTML = condition;
+    // const temperature = weatherData.current.temp_c;
+    // const feelsTemperature = weatherData.current.feelslike_c;
+    // const tempEle = document.querySelector(
+    //   ".weather .first-column .temprature .real"
+    // );
+    // tempEle.innerHTML = `${parseInt(temperature)}&deg;C`;
+    // const tempFeelsEle = document.querySelector(
+    //   ".weather .first-column .temprature .feels-like .temp_itself"
+    // );
+    // tempFeelsEle.innerHTML = `${parseInt(feelsTemperature)}&deg;C`;
+    // const sunrise = sunTimes.results.sunrise;
+    // const sunriseEle = document.querySelector(
+    //   ".weather .first-column .sunrise-sunset .sunrise .sunrise-time span:last-child"
+    // );
+    // sunriseEle.innerHTML = sunrise.replace(/:\d{2}\s/, " ");
+    // const sunset = sunTimes.results.sunset;
+    // const sunsetEle = document.querySelector(
+    //   ".weather .first-column .sunrise-sunset .sunset .sunset-time span:last-child"
+    // );
+    // sunsetEle.innerHTML = sunset.replace(/:\d{2}\s/, " ");
+    // const condition = weatherData.current.condition.text;
+    // const conditionEle = document.querySelector(".state .condition");
+    // conditionEle.innerHTML = condition;
 
-    const conditionImage = weatherData.current.condition.icon;
-    const conditionImageEle = document.querySelector(".state img");
-    conditionImageEle.setAttribute("src", conditionImage);
+    // const conditionImage = weatherData.current.condition.icon;
+    // const conditionImageEle = document.querySelector(".state img");
+    // conditionImageEle.setAttribute("src", conditionImage);
 
-    const humidity = weatherData.current.humidity;
-    const humidityEle = document.querySelector(".humidity .number");
-    humidityEle.innerHTML = `${humidity}%`;
+    // const humidity = weatherData.current.humidity;
+    // const humidityEle = document.querySelector(".humidity .number");
+    // humidityEle.innerHTML = `${humidity}%`;
 
-    const windSpeed = weatherData.current.wind_kph;
-    const windSpeedEle = document.querySelector(".wind-speed .number");
-    windSpeedEle.innerHTML = `${windSpeed} km/h`;
+    // const windSpeed = weatherData.current.wind_kph;
+    // const windSpeedEle = document.querySelector(".wind-speed .number");
+    // windSpeedEle.innerHTML = `${windSpeed} km/h`;
 
-    const pressure = weatherData.current.pressure_mb;
-    const pressureEle = document.querySelector(".pressure .number");
-    pressureEle.innerHTML = `${pressure} hPa`;
+    // const pressure = weatherData.current.pressure_mb;
+    // const pressureEle = document.querySelector(".pressure .number");
+    // pressureEle.innerHTML = `${pressure} hPa`;
 
-    const uv = weatherData.current.uv;
-    const uvEle = document.querySelector(".uv .number");
-    uvEle.innerHTML = uv;
+    // const uv = weatherData.current.uv;
+    // const uvEle = document.querySelector(".uv .number");
+    // uvEle.innerHTML = uv;
 
     // TODO Make a function hourly forecast
 
-    const dailyHours = [];
-    let hoursCounter = 12;
-    for (let i = 0; i < 5; i++) {
-      hoursCounter = hoursCounter === 24 ? 0 : hoursCounter;
-      dailyHours[i] = {
-        time: forecastJSON.forecast.forecastday[0].hour[hoursCounter].time,
-        conditionIcon:
-          forecastJSON.forecast.forecastday[0].hour[hoursCounter].condition
-            .icon,
-        temperature:
-          forecastJSON.forecast.forecastday[0].hour[hoursCounter].temp_c,
-        windDirDeg:
-          forecastJSON.forecast.forecastday[0].hour[hoursCounter].wind_degree,
-        windSpeed:
-          forecastJSON.forecast.forecastday[0].hour[hoursCounter].wind_kph,
-      };
-      hoursCounter += 3;
-    }
+    // const dailyHours = [];
+    // let hoursCounter = 12;
+    // for (let i = 0; i < 5; i++) {
+    //   hoursCounter = hoursCounter === 24 ? 0 : hoursCounter;
+    //   dailyHours[i] = {
+    //     time: forecastJSON.forecast.forecastday[0].hour[hoursCounter].time,
+    //     conditionIcon:
+    //       forecastJSON.forecast.forecastday[0].hour[hoursCounter].condition
+    //         .icon,
+    //     temperature:
+    //       forecastJSON.forecast.forecastday[0].hour[hoursCounter].temp_c,
+    //     windDirDeg:
+    //       forecastJSON.forecast.forecastday[0].hour[hoursCounter].wind_degree,
+    //     windSpeed:
+    //       forecastJSON.forecast.forecastday[0].hour[hoursCounter].wind_kph,
+    //   };
+    //   hoursCounter += 3;
+    // }
 
-    const dailyHoursEle = document.querySelectorAll(
-      ".hourly-forecast .hours .hour"
-    );
+    // const dailyHoursEle = document.querySelectorAll(
+    //   ".hourly-forecast .hours .hour"
+    // );
 
-    for (let i = 0; i < 5; i++) {
-      const timeEle = dailyHoursEle[i].querySelector(".time");
-      timeEle.innerHTML = dailyHours[i].time.split(" ")[1];
-      const conditionIconEle = dailyHoursEle[i].querySelector("img");
-      conditionIconEle.setAttribute(
-        "src",
-        `https:${dailyHours[i].conditionIcon}`
-      );
-      const temperatureEle = dailyHoursEle[i].querySelector(".temp");
-      temperatureEle.innerHTML = `${parseInt(dailyHours[i].temperature)}&deg;C`;
-      const windDirDeg = dailyHoursEle[i].querySelector("svg");
-      windDirDeg.style.cssText += `transform: rotate(${dailyHours[i].windDirDeg}deg)`;
-      const windSpeed = dailyHoursEle[i].querySelector(".wind-speed");
-      windSpeed.innerHTML = `${dailyHours[i].windSpeed} km/h`;
-    }
+    // for (let i = 0; i < 5; i++) {
+    //   const timeEle = dailyHoursEle[i].querySelector(".time");
+    //   timeEle.innerHTML = dailyHours[i].time.split(" ")[1];
+    //   const conditionIconEle = dailyHoursEle[i].querySelector("img");
+    //   conditionIconEle.setAttribute(
+    //     "src",
+    //     `https:${dailyHours[i].conditionIcon}`
+    //   );
+    //   const temperatureEle = dailyHoursEle[i].querySelector(".temp");
+    //   temperatureEle.innerHTML = `${parseInt(dailyHours[i].temperature)}&deg;C`;
+    //   const windDirDeg = dailyHoursEle[i].querySelector("svg");
+    //   windDirDeg.style.cssText += `transform: rotate(${dailyHours[i].windDirDeg}deg)`;
+    //   const windSpeed = dailyHoursEle[i].querySelector(".wind-speed");
+    //   windSpeed.innerHTML = `${dailyHours[i].windSpeed} km/h`;
+    // }
 
     // TODO Make a function 5 days forecast
-    const days = [];
-    const daysInfo = [];
-    const today = new Date();
-    today.setDate(today.getDate() - 1);
-    for (let i = 0; i < 5; i++) {
-      today.setDate(today.getDate() - 1);
-      days[i] = await fetchData("history", city, today);
-      daysInfo[i] = {
-        conditionIcon: days[i].forecast.forecastday[0].day.condition.icon,
-        temperature: days[i].forecast.forecastday[0].day.avgtemp_c,
-        date: days[i].forecast.forecastday[0].date,
-      };
-    }
-    const daysInfoEle = document.querySelectorAll(".daily-forecast .day");
-    for (let i = 0; i < 5; i++) {
-      const conditionIconEle = daysInfoEle[i].querySelector("img");
-      conditionIconEle.setAttribute(
-        "src",
-        `https:${daysInfo[i].conditionIcon}`
-      );
+    // const days = [];
+    // const daysInfo = [];
+    // const today = new Date();
+    // today.setDate(today.getDate() - 1);
+    // for (let i = 0; i < 5; i++) {
+    //   today.setDate(today.getDate() - 1);
+    //   days[i] = await fetchData("history", city, today);
+    //   daysInfo[i] = {
+    //     conditionIcon: days[i].forecast.forecastday[0].day.condition.icon,
+    //     temperature: days[i].forecast.forecastday[0].day.avgtemp_c,
+    //     date: days[i].forecast.forecastday[0].date,
+    //   };
+    // }
+    // const daysInfoEle = document.querySelectorAll(".daily-forecast .day");
+    // for (let i = 0; i < 5; i++) {
+    //   const conditionIconEle = daysInfoEle[i].querySelector("img");
+    //   conditionIconEle.setAttribute(
+    //     "src",
+    //     `https:${daysInfo[i].conditionIcon}`
+    //   );
 
-      const temperatureEle = daysInfoEle[i].querySelector(".temp");
-      temperatureEle.innerHTML = `${parseInt(daysInfo[i].temperature)}&deg;C`;
+    //   const temperatureEle = daysInfoEle[i].querySelector(".temp");
+    //   temperatureEle.innerHTML = `${parseInt(daysInfo[i].temperature)}&deg;C`;
 
-      const dateEle = daysInfoEle[i].querySelector(".date");
-      const formattedDate = `${
-        daysOfWeek[new Date(daysInfo[i].date).getDay()].long
-      }, ${new Date(daysInfo[i].date).getDate() + 1} ${
-        monthsOfYear[new Date(daysInfo[i].date).getMonth()].short
-      }`;
-      dateEle.innerHTML = formattedDate;
-    }
+    //   const dateEle = daysInfoEle[i].querySelector(".date");
+    //   const formattedDate = `${
+    //     daysOfWeek[new Date(daysInfo[i].date).getDay()].long
+    //   }, ${new Date(daysInfo[i].date).getDate() + 1} ${
+    //     monthsOfYear[new Date(daysInfo[i].date).getMonth()].short
+    //   }`;
+    //   dateEle.innerHTML = formattedDate;
+    // }
   }
 }
 
-getData();
 
-const searchCity = document.querySelector(".search-bar input");
-let city = "";
-searchCity.addEventListener("keyup", function (event) {
-  event.preventDefault();
-  if (event.keyCode === 13) {
-    city = searchCity.value.toLowerCase();
-    getData(city);
-  }
+
+document.addEventListener("DOMContentLoaded", () => {
+  getData();
+  Theme.setTheme();
+  API.initAutocomplete();
+  setupEventListeners();
+  Loading();
 });
 
-function updateClock() {
-  const now = new Date();
-  const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-  const hours = utcNow.getHours().toString().padStart(2, "0");
-  const minutes = utcNow.getMinutes().toString().padStart(2, "0");
-  const seconds = utcNow.getSeconds().toString().padStart(2, "0");
-  const timeString = `${hours}:${minutes}`;
+// getData();
 
-  const clockElement = document.querySelector(
-    ".city-time-date .time-date .time"
-  );
-  const secondsElement = document.querySelector(
-    ".city-time-date .time-date .time .seconds"
-  );
-  // secondsElement.style.cssText =
-  //   "font-size:1.25rem; position:absolute; bottom:0; margin-left:5px;";
-  if (clockElement) {
-    secondsElement.innerHTML = `${seconds}`;
-    clockElement.innerHTML = `${timeString}`;
-    clockElement.append(secondsElement);
-  }
+// const searchCity = document.querySelector(".search-bar input");
+// let city = "";
+// searchCity.addEventListener("keyup", function (event) {
+//   event.preventDefault();
+//   if (event.keyCode === 13) {
+//     city = searchCity.value.toLowerCase();
+//     getData(city);
+//   }
+// });
+
+// searchCity.addEventListener("blur", function (event) {
+//   event.preventDefault();
+//   city = searchCity.value.toLowerCase();
+//   getData(city);
+// });
+
+function setupEventListeners() {
+  const searchCity = document.querySelector(".search-bar input");
+  searchCity.addEventListener("keyup", handleSearchInput);
+  searchCity.addEventListener("blur", handleSearchInput);
+
+  document.querySelector(".current-location").addEventListener("click", () => {
+    detectPosition(getData);
+  });
+
+  document.querySelector(".theme-toggle").addEventListener("click", () => {
+    Theme.toggleTheme();
+    const activeTheme = document.documentElement.className;
+    localStorage.setItem("theme", activeTheme);
+  });
 }
+
+function handleSearchInput(event) {
+  if (event.type === "keyup" && event.keyCode !== 13) return;
+  const city = event.target.value.toLowerCase();
+  getData(city);
+}
+
+// function updateClock() {
+//   const now = new Date();
+//   const utcNow = new Date(
+//     now.getTime() +
+//       now.getTimezoneOffset() * 60000 +
+//       globalTimeZoneOffset * 1000
+//   );
+//   const hours = utcNow.getHours().toString().padStart(2, "0");
+//   const minutes = utcNow.getMinutes().toString().padStart(2, "0");
+//   const seconds = utcNow.getSeconds().toString().padStart(2, "0");
+//   const timeString = `${hours}:${minutes}`;
+
+//   const clockElement = document.querySelector(
+//     ".city-time-date .time-date .time"
+//   );
+//   const secondsElement = document.querySelector(
+//     ".city-time-date .time-date .time .seconds"
+//   );
+//   // secondsElement.style.cssText =
+//   //   "font-size:1.25rem; position:absolute; bottom:0; margin-left:5px;";
+//   if (clockElement) {
+//     secondsElement.innerHTML = `${seconds}`;
+//     clockElement.innerHTML = `${timeString}`;
+//     clockElement.append(secondsElement);
+//   }
+// }
 
 let cardsEle = document.querySelectorAll(".card img");
 
 cardsEle.forEach((card) => {
   card.addEventListener("DOMContentLoaded", () => {
     document.body.style.cssText += "background-color: white;";
-    // card.forEach((data) => {
-    //   data.style.cssText += "opacity: 0";
-    //   let loadingEle = document.createElement("div");
-    // });
-    // loadingEle.style.cssText += "height: 50px; width: 50px; background-color: orange;";
-    // card.append(loadingEle);
   });
 });
 
-setInterval(updateClock, 1000);
-updateClock();
+setInterval(() => DOM.updateClock(globalTimeZoneOffset), 1000);
 
 let infoEle = document.querySelector(".weather");
 
@@ -338,16 +402,18 @@ document.querySelector(".current-location").addEventListener("click", () => {
 handleMediaQueryChange(mediaQuery1130, tempSunEle);
 mediaQuery1130.addEventListener("change", handleMediaQueryChange);
 
-changeSearchbarIndex = (event) => {
+let changeSearchbarIndex = (event) => {
   if (event.matches) {
     document
       .querySelector("header")
       .append(document.querySelector(".search-bar"));
   }
 };
+
 changeSearchbarIndex(mediaQuery420);
 mediaQuery420.addEventListener("change", changeSearchbarIndex);
 
+function Loading() {
 document.querySelectorAll(".card").forEach((card) => {
   Array.from(card.children).forEach((child) => {
     child.style.opacity = "0";
@@ -371,41 +437,40 @@ window.addEventListener("load", () => {
       child.style.opacity = "";
     });
   });
-  // console.log("All cards loaded and displayed");
 });
+}
 
-//
+// const toggleTheme = () => {
+//   document.documentElement.className = /^dark/i.test(
+//     document.documentElement.className
+//   )
+//     ? (document.documentElement.className = "light")
+//     : (document.documentElement.className = "dark");
+//   updateThemeIcon();
+// };
 
-const toggleTheme = () => {
-  document.documentElement.className =
-    /^dark/i.test(document.documentElement.className)
-      ? (document.documentElement.className = "light")
-      : (document.documentElement.className = "dark");
-  updateThemeIcon();
-};
+// const updateThemeIcon = () => {
+//   const sunIcon = document.querySelector(".theme-icon.sun");
+//   const moonIcon = document.querySelector(".theme-icon.moon");
 
-const updateThemeIcon = () => {
-  const sunIcon = document.querySelector(".theme-icon.sun");
-  const moonIcon = document.querySelector(".theme-icon.moon");
-  
-  sunIcon.classList.toggle("active");
-  moonIcon.classList.toggle("active");
-};
+//   sunIcon.classList.toggle("active");
+//   moonIcon.classList.toggle("active");
+// };
 
-const setTheme = () => {
-  const sunIcon = document.querySelector(".theme-icon.sun");
-  const moonIcon = document.querySelector(".theme-icon.moon");
-  const preferredTheme = localStorage.getItem("theme");
-  document.documentElement.className = preferredTheme;
-  if (preferredTheme === "light") sunIcon.classList.add("active");
-  else moonIcon.classList.add("active");
-};
+// const setTheme = () => {
+//   const sunIcon = document.querySelector(".theme-icon.sun");
+//   const moonIcon = document.querySelector(".theme-icon.moon");
+//   const preferredTheme = localStorage.getItem("theme");
+//   document.documentElement.className = preferredTheme;
+//   if (preferredTheme === "light") sunIcon.classList.add("active");
+//   else moonIcon.classList.add("active");
+// };
 
-document.querySelector(".theme-toggle").addEventListener("click", () => {
-  toggleTheme();
-  const activeTheme = document.documentElement.className;
-  localStorage.setItem("theme", activeTheme);
-});
+// document.querySelector(".theme-toggle").addEventListener("click", () => {
+//   toggleTheme();
+//   const activeTheme = document.documentElement.className;
+//   localStorage.setItem("theme", activeTheme);
+// });
 
-// Call setTheme when the page loads
-document.addEventListener("DOMContentLoaded", setTheme);
+// // Call setTheme when the page loads
+// document.addEventListener("DOMContentLoaded", setTheme);
