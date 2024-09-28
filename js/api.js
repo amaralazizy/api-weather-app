@@ -1,8 +1,11 @@
 import * as Utils from "./utils.js";
 
-const WEATHER_API_KEY = "e16ec41a89a54903bd901218240408";
-const GOOGLE_API_KEY = "AIzaSyCMR0GifIRTiL2qcJgMhq1l4xp2ydau7FI";
+import * as dotenv from "dotenv";
+dotenv.config();
+const env = process.env;
 
+const WEATHER_API_KEY = env.WEATHER_API_KEY;
+const GOOGLE_API_KEY = env.GOOGLE_API_KEY;
 export async function fetchSunTimes() {
   const apiUrl =
     "https://api.sunrisesunset.io/json?lat=30.111946&lng=31.270961000000003";
