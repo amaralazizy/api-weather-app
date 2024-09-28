@@ -67,7 +67,7 @@ function initAutocomplete() {
 }
 
 let cardsEle = document.querySelectorAll(".card img");
-let googleMap = document.querySelector(".google-map");
+let googleMap = document.querySelector(".google-maps");
 googleMap.setAttribute("src", `https://maps.googleapis.com/maps/api/js?key=${API.GOOGLE_API_KEY}&libraries=places`);
 
 cardsEle.forEach((card) => {
