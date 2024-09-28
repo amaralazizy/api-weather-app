@@ -5,7 +5,7 @@ dotenv.config();
 const env = process.env;
 
 const WEATHER_API_KEY = env.WEATHER_API_KEY;
-const GOOGLE_API_KEY = env.GOOGLE_API_KEY;
+export const GOOGLE_API_KEY = env.GOOGLE_API_KEY;
 export async function fetchSunTimes() {
   const apiUrl =
     "https://api.sunrisesunset.io/json?lat=30.111946&lng=31.270961000000003";
